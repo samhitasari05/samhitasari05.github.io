@@ -1,0 +1,1211 @@
+<!DOCTYPE HTML>
+<!--
+Samhita Sarikonda
+-->
+<html>
+
+<head>
+    <title>Samhita Sarikonda</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <script src="https://cdn.jsdelivr.net/npm/wordcloud@2.1.0/dist/wordcloud.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    </noscript>
+    <style>
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            row-gap: 2rem;
+            column-gap: 2.5;
+            padding: 1rem 0;
+            align-items: start;
+        }
+
+        .dummy-project {
+            visibility: hidden;
+            height: 0;
+        }
+
+        */ .project {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+
+        }
+
+        .project-image img {
+            max-width: 500px;
+            max-height: 400px;
+        }
+
+        .project-text h3 {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+            color: #ffffff;
+        }
+
+
+        .view-more {
+            margin: 0 auto;
+            display: block;
+            padding: 0.45rem 1.2rem;
+            background-color: transparent;
+            border: 1.5px solid white;
+            color: white;
+            border-radius: 5px;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.3s ease;
+            outline: none;
+            box-shadow: none;
+            line-height: 1.2;
+            font-size: 1rem;
+            letter-spacing: 1px;
+
+        }
+
+        .view-more:hover {
+            background-color: #5dade2;
+            color: black;
+        }
+
+
+        .btn-outline-light:hover {
+            background-color: #ffffff;
+            color: #000000;
+            transition: 0.3s ease-in-out;
+            transform: scale(1.05);
+        }
+
+        /* 🔥 Fade-in animation for About section */
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.6s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.9s;
+        }
+
+        .delay-4 {
+            animation-delay: 1.2s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        article.experience-timeline {
+            padding: 3rem 2rem;
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+
+        .timeline {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 3px;
+            height: 100%;
+            background: #5dade2;
+            transform: translateX(-50%);
+        }
+
+        .timeline-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .timeline-entry.left .timeline-card {
+            order: 1;
+            text-align: right;
+            margin-right: auto;
+        }
+
+        .timeline-entry.right .timeline-card {
+            order: 2;
+            text-align: left;
+            margin-left: auto;
+        }
+
+        .timeline-card {
+            width: 48%;
+            padding: 1.5rem;
+            background-color: #1c1c1c;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            color: #fff;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #5dade2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 18px;
+            z-index: 1;
+        }
+
+        .tags span {
+            display: inline-block;
+            background-color: #5dade2;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 15px;
+            margin: 3px;
+            font-size: 0.75rem;
+        }
+
+        .experience-timeline {
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 3rem 2rem;
+            border-radius: 10px;
+        }
+
+
+        .timeline {
+            width: 100%;
+        }
+
+        .timeline-tags {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .timeline-tags .tag {
+            background-color: #e3e3e3;
+            color: #111;
+            padding: 0.4em 1em;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-family: sans-serif;
+            font-weight: 500;
+        }
+
+        .course-section {
+            width: 95%;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(0, 10, 20, 0.9), rgba(30, 30, 60, 0.9));
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            color: white;
+        }
+
+        .course-section h3 {
+            margin-top: 1.5rem;
+            color: #5dade2;
+            font-size: 1.3rem;
+        }
+
+        .course-badge {
+            display: inline-block;
+            background-color: #5dade2;
+            color: black;
+            padding: 6px 14px;
+            border-radius: 999px;
+            margin: 6px 6px 0 0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .course-badge:hover {
+            background-color: #00d1ff;
+            transform: scale(1.05);
+            cursor: default;
+        }
+
+        .course-fade-in {
+            animation: fadeInUp 0.8s ease-out both;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timeline-card p.description {
+            text-align: justify;
+        }
+
+        .project-image {
+            width: 100%;
+            height: 320px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .project {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            text-align: left;
+            padding: 0 1rem;
+            box-sizing: border-box;
+        }
+
+        .dashboard-fix {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .dashboard-fix p {
+            margin-bottom: 1.2rem;
+            min-height: 112px;
+        }
+
+        .chest-xray-fix {
+            margin-top: -1.5rem;
+        }
+
+        .project-row-fix {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-row-fix .project-fix {
+            width: 48%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .project-row-fix .project-image img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+        }
+
+        .github-link-box {
+            margin: 40px auto;
+            /* Centers horizontally */
+            padding: 1.5rem 2rem;
+            width: 85%;
+            max-width: 1000px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.05rem;
+            color: #fff;
+            line-height: 1.7;
+            box-shadow: 0 0 12px rgba(90, 173, 226, 0.15);
+        }
+
+        .github-link-box a {
+            color: #5dade2;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        /* White main heading for SKILLS */
+        #skill h2.major {
+            color: white;
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Blue subheadings (like 'Statistical Methods') */
+        #skill li b {
+            color: #5CC6F1;
+            /* The same blue from your COURSE WORK pills */
+            font-weight: 600;
+        }
+
+        /* Adjust spacing below the image and between list items */
+        #skill .image.main {
+            margin-top: -1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        #skill ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        #skill li {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+            color: #ffffff;
+            /* Keep the text white for contrast on dark background */
+        }
+    </style>
+
+
+</head>
+
+
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Header -->
+        <header id="header">
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <div class="logo">
+                <span class="icon fa-gem"></span>
+            </div>
+            <div class="content">
+                <div class="inner">
+                    <h1>Samhita Sarikonda</h1>
+                    <p>Data Scientist | Machine Learning Engineer | Data Engineer</p>
+                    <p class="lead mt-2">Turning real-world problems into data-driven, scalable solutions.</p>
+                    <a href="#project" class="btn btn-outline-light btn-lg mt-3">Explore My Work</a>
+
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#intro"><strong>About</strong></a></li>
+                    <li><a href="#exp"><strong>Experience</strong></a></li>
+                    <li><a href="#project"><strong>Projects</strong></a></li>
+                    <li><a href="#certi"><strong>Course work</strong></a></li>
+                    <li><a href="#skill"><strong>Skills</strong></a></li>
+                    <li><a href="#contact"><strong>Contact</strong></a></li>
+                </ul>
+
+            </nav>
+        </header>
+        <br>
+        <ul class="icons">
+            <li><a href="mailto:sari.samhita@gmail.com" target="_blank" rel="noopener noreferrer"
+                    class="fa fa-envelope"><span class="label"></span></a></li>
+            <li><a href="https://www.linkedin.com/in/samhita-sarikonda%F0%9F%91%A9%E2%80%8D%F0%9F%92%BB-a62101260/"
+                    target="_blank" rel="noopener noreferrer" class="icon brands fa-linkedin"><span
+                        class="label">LinkedIn</span></a></li>
+            <li><a href="https://github.com/samhitasari05?tab=repositories" target="_blank" rel="noopener noreferrer"
+                    class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+        </ul>
+
+        <!-- Main -->
+        <div id="main">
+
+            <!-- Intro -->
+            <article id="intro" class="container my-5">
+                <h2 class="major">About Me</h2>
+
+                <div class="animated-about">
+                    <p class="fade-in delay-1">
+                        <strong style="font-size: 1.3rem; color: #5dade2;">Driven by curiosity, shaped by
+                            data.</strong>
+                    </p>
+
+                    <p class="fade-in delay-2">
+                        I'm Samhita Sarikonda, a Data Analytics graduate from George Mason University who thrives on
+                        building intelligent systems that solve real-world problems. I've worked across diverse
+                        domains — from secure AI agents and LLM pipelines to cloud data engineering and NLP
+                        research.
+                    </p>
+
+                    <p class="fade-in delay-3">
+                        My portfolio reflects both the science and storytelling of data. Whether it's cleaning a
+                        messy dataset, deploying cloud pipelines, or testing models under noisy inputs — I bring
+                        structure, curiosity, and purpose to each challenge.
+                    </p>
+
+                    <p class="fade-in delay-4">
+                        If you're here, welcome. Scroll down and explore the work — each project tells a story of
+                        where data meets clarity.
+                    </p>
+                </div>
+            </article>
+
+
+            </article>
+            <!-- Certification -->
+            <article id="certi" class="course-section course-fade-in">
+
+                <h2 class="major">Course Work</h2>
+
+                <h3><i class="fas fa-database"></i> Data Science and Engineering Core</h3>
+                <div>
+                    <span class="course-badge">Database Management Systems</span>
+                    <span class="course-badge">Data Programming</span>
+                    <span class="course-badge">Statistics for Data Science</span>
+                    <span class="course-badge">Intro to Analytics & Modeling</span>
+                    <span class="course-badge">Predictive Analytics</span>
+                    <span class="course-badge">Business Intelligence</span>
+                </div>
+
+                <h3><i class="fas fa-brain"></i> Machine Learning and AI</h3>
+                <div>
+                    <span class="course-badge">Interpretable Machine Learning</span>
+                    <span class="course-badge">Introduction to NLP</span>
+                    <span class="course-badge">NLP with Deep Learning</span>
+                </div>
+
+                <h3><i class="fas fa-cloud"></i> Big Data and Cloud Systems</h3>
+                <div>
+                    <span class="course-badge">Scalable Data Analytics and Big Data</span>
+                    <span class="course-badge">Data Warehousing</span>
+                    <span class="course-badge">Data Mining</span>
+                    <span class="course-badge">Cloud Computing (AWS/GCP)</span>
+                </div>
+
+                <h3><i class="fas fa-lightbulb"></i> Special Topics</h3>
+                <div>
+                    <span class="course-badge">Prompt Engineering & LLMs</span>
+                    <span class="course-badge">Data Visualization (Tableau/Power BI)</span>
+                    <span class="course-badge">Multimodal Learning</span>
+
+                </div>
+
+                <!--
+<h3><i class="fas fa-certificate"></i> Certifications</h3>
+<div>
+  <span class="course-badge">Data Analytics by Cisco</span>
+  <span class="course-badge">AWS Certified Cloud Practitioner</span>
+  <span class="course-badge">Data Scientist Associate</span>
+</div>
+-->
+
+            </article>
+            <article id="project" class="active" style="width: 80%;">
+                <h2 class="major">Projects</h2>
+                <div class="projects-grid">
+                    <div class="project">
+                        <div class="project-image">
+                            <img src="images/NetguardAI.png" alt="NetGuard: AI Pipeline for Threat Detection">
+                        </div>
+                        <div class="project-text">
+                            <h3>NetGuard: AI Pipeline for Threat Detection</h3>
+                            <p>Built a modular AWS Lambda pipeline leveraging SecureGPT and S3 to classify network logs,
+                                integrate Reflexion and CoT prompting for improved threat detection, and automate
+                                prioritization workflows.
+                            <p></p>
+
+                            <a href="https://github.com/samhitasari05/Agentic-AI-for-Real-Time-Network-Traffic-Monitoring-Proactive-Threat-Mitigation"
+                                target="_blank" rel="noopener noreferrer">
+                                <button class="view-more">View More</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center" style="margin-top: -3px;">
+                        <div class="project">
+                            <div class="project-image">
+                                <img src="images/FraudDetection.png" alt="Scalable Fraud Detection - Geospatial Data">
+                            </div>
+                            <div class="project-text">
+                                <h3>Scalable Fraud Detection - Geospatial Data</h3>
+                                <p>Built a fraud detection pipeline by integrating transactional data with geospatial
+                                    mapping. Used clustering and anomaly detection on a scalable Spark pipeline to
+                                    identify
+                                    fraud hotspots across U.S. regions.</p>
+
+                                <a href="https://github.com/samhitasari05/Data_Science_Projects_DeepDive/tree/main/Scalable%20Fraud%20Detection%20with%20Geospatial%20Data"
+                                    target="_blank" rel="noopener noreferrer">
+                                    <button class="view-more">View More</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project">
+                        <div class="project-image">
+                            <img src="images/Word2vec.png" alt="VectorSpeak: Word2Vec Skip-Gram Embedding Model">
+                        </div>
+                        <div class="project-text">
+                            <h3>VectorSpeak: Word2Vec Skip-Gram Embedding Model </h3>
+                            <p>Implemented a Word2Vec model from scratch using PyTorch, training a skip-gram network
+                                with negative sampling to generate and visualize semantic word embeddings from raw text
+                                data.</p>
+
+                            <a href="https://github.com/samhitasari05/NLP_With_DL_DeepDive/tree/main/vectorspeak_word2vec_skipgram"
+                                target="_blank" rel="noopener noreferrer">
+                                <button class="view-more">View More</button>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="project" style="min-height: 720px;">
+                        <div class="project-image">
+                            <img src="images/Airlinereviews.png" alt="Airline Reviews Dashboard">
+                        </div>
+                        <div class="project-text project-align-fix" style="margin-top: 25px;">
+                            <h3>Airline Reviews Dashboard</h3>
+                            <p>
+                                Designed an interactive dashboard in Tableau to analyze airline customer reviews.
+                                Visualized sentiment trends, review categories, and rating breakdowns to uncover service
+                                improvement opportunities.
+                            </p>
+                            <a href="https://github.com/samhitasari05/Airline-Reviews-Dashboard" target="_blank"
+                                rel="noopener noreferrer">
+                                <button class="view-more">View More</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Chest X-Ray Project Block -->
+                    <!-- Chest X-Ray Project (Adjusted Margin Top) -->
+                    <div class="row justify-content-center" style="margin-top: -140px;">
+                        <div class="project">
+                            <div class="project-image">
+                                <img src="images/Chestxray.png" alt="Chest X-Ray Disease Detection">
+                            </div>
+                            <div class="project-text">
+                                <h3>Chest X-Ray Disease Detection</h3>
+                                <p>Built a deep learning model using DenseNet-121 to detect 14 chest diseases from
+                                    X-rays. Applied GradCAM to visualize regions influencing predictions. Handled class
+                                    imbalance using weighted loss.</p>
+                                <a href="https://github.com/samhitasari05/chest-xray-disease-detection" target="_blank"
+                                    rel="noopener noreferrer">
+                                    <button class="view-more">View More</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center" style="margin-top: -147px;">
+                        <div class="project">
+                            <div class="project-image">
+                                <img src="images/nifty50.png" alt="CAGRviz: Visualizing Nifty 50 Growth">
+                            </div>
+                            <div class="project-text">
+                                <h3>CAGRviz: Visualizing Nifty 50 Growth</h3>
+                                <p>Analyzed Nifty 50's 10-year performance using CAGR to uncover long-term growth
+                                    trends. Built interactive charts to highlight consistent patterns for investors and
+                                    analysts.</p>
+
+                                <a href="https://github.com/samhitasari05/Data_Science_Projects_DeepDive/tree/main/CAGRViz:%20Visualizing%20Nifty%2050%20Growth"
+                                    target="_blank" rel="noopener noreferrer">
+                                    <button class="view-more">View More</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center" style="margin-top: -0px;">
+                        <div class="project">
+                            <div class="project-image">
+                                <img src="images/calgary.png" alt="Calgary Crime Data Analysis">
+                            </div>
+                            <div class="project-text">
+                                <h3>Calgary Crime Data Analysis</h3>
+                                <p>Analyzed Calgary crime data (2018-2024) and built an LSTM model to predict future
+                                    crime trends. Conducted EDA to uncover high-crime areas, seasonal trends, and
+                                    category patterns to support data-driven policing and safety planning.</p>
+                                <a href="https://github.com/samhitasari05/Data_Science_Projects_DeepDive/tree/main/Calgary_Crime_Data_Analysis_NeuralNetwork"
+                                    target="_blank" rel="noopener noreferrer">
+                                    <button class="view-more">View More</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row justify-content-center" style="margin-top: -1px;">
+                        <div class="project">
+                            <div class="project-image">
+                                <img src="images/Mage.png" alt="Real-Time Crypto Data Pipeline with Mage">
+                            </div>
+                            <div class="project-text">
+                                <h3>Real-Time Crypto Data Pipeline with Mage</h3>
+                                <p>Built a real-time data pipeline using Mage to ingest and process cryptocurrency
+                                    prices from the Polygon API. Designed modular ETL flows for data extraction,
+                                    transformation, and warehouse loading to support streaming analytics.</p>
+                                <a href="https://github.com/samhitasari05/Data_Science_Projects_DeepDive/tree/main/Calgary_Crime_Data_Analysis_NeuralNetwork"
+                                    target="_blank" rel="noopener noreferrer">
+                                    <button class="view-more">View More</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="project" style="min-height: 720px;">
+                        <div class="project-image">
+                            <img src="images/bridge.png" alt="Bridge Defect Detection">
+                        </div>
+                        <div class="project-text project-align-fix" style="margin-top: 25px;">
+                            <h3>Multimodal Bridge Defect Detection</h3>
+                            <p>
+                                Co-authored an IEEE-published framework integrating NDE sensor data (IE & USW) with
+                                image processing to detect bridge defects. Used Alpha Shape Analysis and visual
+                                cross-verification to enhance defect localization and minimize false positives.
+                            </p>
+                            <a href="https://github.com/samhitasari05/A-Multimodel-Framework-for-Enhanced-Bridge-Defect-Detection-"
+                                target="_blank" rel="noopener noreferrer">
+                                <button class="view-more">View More</button>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="project" style="min-height: 720px;">
+                        <div class="project-image">
+                            <img src="images/autogen.png" alt="Autogen Research Paper Summarization">
+                        </div>
+                        <div class="project-text project-align-fix" style="margin-top: 25px;">
+                            <h3>Autogen Research Paper Summarization</h3>
+                            <p>
+                                Built an AI tool using Autogen and Streamlit to fetch and summarize research papers.
+                                Integrated ArXiv and Google Scholar for automated insights and topic recommendations.
+                            </p>
+                            <a href="https://github.com/samhitasari05/autogen_Agent" target="_blank"
+                                rel="noopener noreferrer">
+                                <button class="view-more">View More</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="center-wrapper">
+                        <div class="github-link-box">
+                            👇 To explore more projects like these, visit my
+                            <a href="https://github.com/samhitasari05" target="_blank">GitHub portfolio</a>.<br><br>
+                            📁 <strong>Data Science Projects:</strong>
+                            <a href="https://github.com/samhitasari05/Data_Science_Projects_DeepDive"
+                                target="_blank">View Repo</a> |
+                            🏗️ <strong>Data Engineering Projects:</strong>
+                            <a href="https://github.com/samhitasari05/data-engineering-projects-mageai-polygon"
+                                target="_blank">View Repo</a> |
+                            📘 <strong>AI/NLP Projects:</strong>
+                            <a href="https://github.com/samhitasari05/NLP_With_DL_DeepDive" target="_blank">View
+                                Repo</a>
+                        </div>
+                    </div>
+
+                </div>
+            </article>
+
+
+            <!-- Work -->
+            <article id="exp" class="active"
+                style="width: 100%; background-color: rgba(0, 0, 0, 0.4); padding: 3rem 2rem; border-radius: 10px; margin: 0 auto;">
+
+                <h2 class="major">Experience</h2>
+                <div class="timeline">
+
+                    <div class="timeline-entry left">
+                        <div class="timeline-marker">🎓</div>
+                        <div class="timeline-card">
+                            <h3>Graduate Teaching Assistant</h3>
+                            <p><strong>George Mason University</strong></p>
+                            <p class="timeline-date">Jan 2025 - May 2025</p>
+                            <p class="description">Supported instruction and grading for NLP with Deep Learning (AIT
+                                726), focusing on large language models (LLMs), PyTorch-based model implementation, and
+                                reproducible ML workflows. Mentored students in lab sessions and strengthened technical
+                                communication through feedback and walkthroughs.</p>
+                            <div class="timeline-tags">
+                                <span class="tag">NLP</span>
+                                <span class="tag">LLMs</span>
+                                <span class="tag">PyTorch</span>
+                                <span class="tag">Word2Vec</span>
+                                <span class="tag">RNN</span>
+                                <span class="tag">LSTM</span>
+                                <span class="tag">Named Entity Recognition</span>
+                                <span class="tag">Sentiment Analysis</span>
+                                <span class="tag">Model Evaluation</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-entry right">
+                        <div class="timeline-marker">🔬</div>
+                        <div class="timeline-card">
+                            <h3>Data Science Research Assistant</h3>
+                            <p><strong>George Mason University</strong></p>
+                            <p class="timeline-date">Jun 2024- May 2025</p>
+                            <ul>
+                                <li>Built and validated modular data pipelines to extract and preprocess multimodal logs
+                                    and structured/unstructured datasets; implemented SQL-based checks for consistency
+                                    across time partitions.</li>
+                                <li>Contributed to LLM-based experimentation for event extraction and anomaly detection;
+                                    co-authored peer-reviewed papers (IEEE, NLDB) involving benchmarking and multimodal
+                                    fusion research.</li>
+                            </ul>
+                            <div class="timeline-tags">
+                                <span class="tag">LLMs</span>
+                                <span class="tag">Multimodal Fusion</span>
+                                <span class="tag">Data Pipelines</span>
+                                <span class="tag">PyTorch</span>
+                                <span class="tag">HuggingFace</span>
+                                <span class="tag">NLP</span>
+                                <span class="tag">Evaluation</span>
+                                <span class="tag">Python</span>
+                                <span class="tag">SQL</span>
+                                <span class="tag">Research</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-entry left">
+                        <div class="timeline-marker">💼</div>
+                        <div class="timeline-card">
+                            <h3>Associate Data Engineer</h3>
+                            <p><strong>Twilio Inc.</strong></p>
+                            <p class="timeline-date"> Jan 2022 - Aug 2023</p>
+                            <p class="description">Developed and maintained scalable SQL-based ETL workflows for billing
+                                pipelines using internal data tools. Built Looker dashboards to monitor KPIs across
+                                departments and collaborated with engineering teams to automate exception handling,
+                                logging, and data validation using AWS services.</p>
+                            <div class="timeline-tags">
+                                <span class="tag">SQL</span>
+                                <span class="tag">ETL</span>
+                                <span class="tag">Looker</span>
+                                <span class="tag">AWS</span>
+                                <span class="tag">Data Pipelines</span>
+                                <span class="tag">Automation</span>
+                                <span class="tag">Exception Handling</span>
+                                <span class="tag">SQL</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-entry right">
+                        <div class="timeline-marker">🛠</div>
+                        <div class="timeline-card">
+                            <h3>Data Operations Analyst</h3>
+                            <p><strong>Twilio Inc.</strong></p>
+                            <p class="timeline-date">Jan 2021 - Dec 2022</p>
+                            <p class="description">Automated reconciliation workflows for usage and billing systems
+                                using Python and SQL. Integrated Stripe APIs and used Datadog and Splunk dashboards to
+                                monitor anomalies and streamline financial reporting for business analysts and finance
+                                teams.
+                            </p>
+                            <div class="timeline-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">SQL</span>
+                                <span class="tag">Stripe API</span>
+                                <span class="tag">Dashboards</span>
+                                <span class="tag">Anomaly Detection</span>
+                                <span class="tag">Finance Analytics</span>
+                                <span class="tag">Automation</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-entry left">
+                        <div class="timeline-marker">📊</div>
+                        <div class="timeline-card">
+                            <h3>Data Analyst Intern</h3>
+                            <p><strong>BSNL</strong></p>
+                            <p class="timeline-date">Jun 2020 - Aug 2020</p>
+                            <p class="description">Analyzed telecom subscriber trends and usage patterns from regional
+                                datasets using SQL and Excel. Created time-series dashboards and performance summaries
+                                for internal strategy reviews and reporting.</p>
+                            <div class="timeline-tags">
+                                <span class="tag">SQL</span>
+                                <span class="tag">Excel</span>
+                                <span class="tag">Time-Series</span>
+                                <span class="tag">Dashboarding(Tableau)</span>
+                                <span class="tag">Telecom</span>
+                                <span class="tag">Data Analysis</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </article>
+
+
+
+
+            <!-- Skills -->
+            <article id="skill">
+                <h2 class="major">SKILLS</h2>
+                <span class="image main"><img src="images/tool.jpg" alt="" /></span>
+                <ul>
+                    <li><b>Statistical Methods :</b> Regression, Correlation, A/B (Hypothesis Testing), Clustering,
+                        Time-series Analysis</li>
+                    <li><b>Machine Learning :</b> Supervised Learning, Unsupervised Learning, Reinforcement Learning,
+                        Large Language Models (BERT, LLAVA, LLAMA, GPT4o, FLAN T5)</li>
+                    <li><b>Programming Languages :</b> Python, SQL, R, Pytorch, Keras, Tensorflow</li>
+                    <li><b>Cloud Platforms :</b> AWS (EC2, S3, Lambda), Google Cloud Platform</li>
+                    <li><b>Databases :</b> MySQL, SQLite, Google BigQuery, MongoDB</li>
+                    <li><b>Data Visualization tools :</b> Tableau, PowerBI, Looker Studio</li>
+                    <li><b>Big Data & ETL Tools :</b> HDFS, Pyspark, Kafka</li>
+                    <li><b>Data Mining :</b> Data Cleaning, Data Wrangling, Data Exploration, Data Visualization, Data
+                        Analysis, Data Mining, Data Modelling, Data Interpretation, Data Presentation</li>
+                </ul>
+            </article>
+
+            <!-- Contact -->
+            <article id="contact">
+                <h2 class="major">Contact</h2>
+                <ul class="icons">
+                    <li><a href="mailto:sari.samhita@gmail.com" target="_blank" rel="noopener noreferrer"
+                            class="fa fa-envelope"><span class="label"></span></a></li>
+                    <li><a href="https://www.linkedin.com/in/samhita-sarikonda%F0%9F%91%A9%E2%80%8D%F0%9F%92%BB-a62101260/"
+                            target="_blank" rel="noopener noreferrer" class="icon brands fa-linkedin"><span
+                                class="label">LinkedIn</span></a></li>
+                </ul>
+                <form method="POST" action="https://formspree.io/f/mgebnepa">
+                    <div class="fields">
+                        <div class="field half">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name" />
+                        </div>
+                        <div class="field half">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" id="email" />
+                        </div>
+                        <div class="field">
+                            <label for="message">Message</label>
+                            <textarea name="message" id="message" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <ul class="actions">
+                        <li><input type="submit" value="Send Message" class="primary" /></li>
+                        <li><input type="reset" value="Reset" /></li>
+                    </ul>
+                </form>
+                <div class="calendly-inline-widget"
+                    data-url="https://calendly.com/sari-samhita?hide_event_type_details=1&hide_gdpr_banner=1&background_color=1a1a1a&text_color=ffffff"
+                    style="min-width:320px;height:700px;"></div>
+                <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"
+                    async></script>
+                <br>
+            </article>
+
+
+            <!-- Elements -->
+            <article id="elements">
+                <h2 class="major">Elements</h2>
+
+                <section>
+                    <h3 class="major">Text</h3>
+                    <p>This is <b>bold</b> and this is <strong>strong</strong>. This is <i>italic</i> and this is
+                        <em>emphasized</em>.
+                        This is <sup>superscript</sup> text and this is <sub>subscript</sub> text.
+                        This is <u>underlined</u> and this is code: <code>for (;;) { ... }</code>. Finally, <a
+                            href="#">this is a link</a>.
+                    </p>
+                    <hr />
+                    <h2>Heading Level 2</h2>
+                    <h3>Heading Level 3</h3>
+                    <h4>Heading Level 4</h4>
+                    <h5>Heading Level 5</h5>
+                    <h6>Heading Level 6</h6>
+                    <hr />
+                    <h4>Blockquote</h4>
+                    <blockquote>Fringilla nisl. Donec accumsan interdum nisi, quis tincidunt felis sagittis eget tempus
+                        euismod. Vestibulum ante ipsum primis in faucibus vestibulum. Blandit adipiscing eu felis
+                        iaculis volutpat ac adipiscing accumsan faucibus. Vestibulum ante ipsum primis in faucibus lorem
+                        ipsum dolor sit amet nullam adipiscing eu felis.</blockquote>
+                    <h4>Preformatted</h4>
+                    <pre><code>i = 0;
+
+while (!deck.isInOrder()) {
+    print 'Iteration ' + i;
+    deck.shuffle();
+    i++;
+}
+
+print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
+                </section>
+
+                <section>
+                    <h3 class="major">Lists</h3>
+
+                    <h4>Unordered</h4>
+                    <ul>
+                        <li>Dolor pulvinar etiam.</li>
+                        <li>Sagittis adipiscing.</li>
+                        <li>Felis enim feugiat.</li>
+                    </ul>
+
+                    <h4>Alternate</h4>
+                    <ul class="alt">
+                        <li>Dolor pulvinar etiam.</li>
+                        <li>Sagittis adipiscing.</li>
+                        <li>Felis enim feugiat.</li>
+                    </ul>
+
+                    <h4>Ordered</h4>
+                    <ol>
+                        <li>Dolor pulvinar etiam.</li>
+                        <li>Etiam vel felis viverra.</li>
+                        <li>Felis enim feugiat.</li>
+                        <li>Dolor pulvinar etiam.</li>
+                        <li>Etiam vel felis lorem.</li>
+                        <li>Felis enim et feugiat.</li>
+                    </ol>
+                    <h4>Icons</h4>
+                    <ul class="icons">
+                        <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+                        <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+                        <li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+                        <li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
+                    </ul>
+
+                    <h4>Actions</h4>
+                    <ul class="actions">
+                        <li><a href="#" class="button primary">Default</a></li>
+                        <li><a href="#" class="button">Default</a></li>
+                    </ul>
+                    <ul class="actions stacked">
+                        <li><a href="#" class="button primary">Default</a></li>
+                        <li><a href="#" class="button">Default</a></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="major">Table</h3>
+                    <h4>Default</h4>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Item One</td>
+                                    <td>Ante turpis integer aliquet porttitor.</td>
+                                    <td>29.99</td>
+                                </tr>
+                                <tr>
+                                    <td>Item Two</td>
+                                    <td>Vis ac commodo adipiscing arcu aliquet.</td>
+                                    <td>19.99</td>
+                                </tr>
+                                <tr>
+                                    <td>Item Three</td>
+                                    <td> Morbi faucibus arcu accumsan lorem.</td>
+                                    <td>29.99</td>
+                                </tr>
+                                <tr>
+                                    <td>Item Four</td>
+                                    <td>Vitae integer tempus condimentum.</td>
+                                    <td>19.99</td>
+                                </tr>
+                                <tr>
+                                    <td>Item Five</td>
+                                    <td>Ante turpis integer aliquet porttitor.</td>
+                                    <td>29.99</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td>100.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <h4>Alternate</h4>
+                    <div class="table-wrapper">
+                        <table class="alt">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Item One</td>
+                                    <td>Ante turpis integer aliquet porttitor.</td>
+                                    <td>29.99</td>
+                                </tr>
+                                <tr>
+                                    <td>Item Two</td>
+                                    <td>Vis ac commodo adipiscing arcu aliquet.</td>
+                                    <td>19.99</td>
+                                </tr>
+                                <tr>
+                                    <td>Item Three</td>
+                                    <td> Morbi faucibus arcu accumsan lorem.</td>
+                                    <td>29.99</td>
+                                </tr>
+                                <tr>
+                                    <td>Item Four</td>
+                                    <td>Vitae integer tempus condimentum.</td>
+                                    <td>19.99</td>
+                                </tr>
+                                <tr>
+                                    <td>Item Five</td>
+                                    <td>Ante turpis integer aliquet porttitor.</td>
+                                    <td>29.99</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td>100.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </section>
+
+                <section>
+                    <h3 class="major">Buttons</h3>
+                    <ul class="actions">
+                        <li><a href="#" class="button primary">Primary</a></li>
+                        <li><a href="#" class="button">Default</a></li>
+                    </ul>
+                    <ul class="actions">
+                        <li><a href="#" class="button">Default</a></li>
+                        <li><a href="#" class="button small">Small</a></li>
+                    </ul>
+                    <ul class="actions">
+                        <li><a href="#" class="button primary icon solid fa-download">Icon</a></li>
+                        <li><a href="#" class="button icon solid fa-download">Icon</a></li>
+                    </ul>
+                    <ul class="actions">
+                        <li><span class="button primary disabled">Disabled</span></li>
+                        <li><span class="button disabled">Disabled</span></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="major">Form</h3>
+                    <form method="post" action="#">
+                        <div class="fields">
+                            <div class="field half">
+                                <label for="demo-name">Name</label>
+                                <input type="text" name="demo-name" id="demo-name" value="" placeholder="Jane Doe" />
+                            </div>
+                            <div class="field half">
+                                <label for="demo-email">Email</label>
+                                <input type="email" name="demo-email" id="demo-email" value=""
+                                    placeholder="jane@untitled.tld" />
+                            </div>
+                            <div class="field">
+                                <label for="demo-category">Category</label>
+                                <select name="demo-category" id="demo-category">
+                                    <option value="">-</option>
+                                    <option value="1">Manufacturing</option>
+                                    <option value="1">Shipping</option>
+                                    <option value="1">Administration</option>
+                                    <option value="1">Human Resources</option>
+                                </select>
+                            </div>
+                            <div class="field half">
+                                <input type="radio" id="demo-priority-low" name="demo-priority" checked>
+                                <label for="demo-priority-low">Low</label>
+                            </div>
+                            <div class="field half">
+                                <input type="radio" id="demo-priority-high" name="demo-priority">
+                                <label for="demo-priority-high">High</label>
+                            </div>
+                            <div class="field half">
+                                <input type="checkbox" id="demo-copy" name="demo-copy">
+                                <label for="demo-copy">Email me a copy</label>
+                            </div>
+                            <div class="field half">
+                                <input type="checkbox" id="demo-human" name="demo-human" checked>
+                                <label for="demo-human">Not a robot</label>
+                            </div>
+                            <div class="field">
+                                <label for="demo-message">Message</label>
+                                <textarea name="demo-message" id="demo-message" placeholder="Enter your message"
+                                    rows="6"></textarea>
+                            </div>
+                        </div>
+                        <ul class="actions">
+                            <li><input type="submit" value="Send Message" class="primary" /></li>
+                            <li><input type="reset" value="Reset" /></li>
+                        </ul>
+                    </form>
+                </section>
+
+            </article>
+
+        </div>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <p class="copyright"> Copyright &copy; 2024 | Samhita Sarikonda</p>
+        </footer>
+
+    </div>
+
+    <!-- BG -->
+    <div id="bg">
+        <video autoplay muted loop id="bg-video">
+            <source src="assets/videos/bg2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <!-- 2) ADD BOOTSTRAP JS bundle here -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+vvxpg6pD2bWer+GmZHM6N9MuXf6E"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
